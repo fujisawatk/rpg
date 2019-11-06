@@ -1,14 +1,16 @@
 "use strict"
 
-const FONT = "32px monospace"; // 使用フォント
-const HEIGHT = 640;            // 仮装画面サイズ。高さ
-const WIDTH = 960;             // 仮装画面サイズ。幅
-const MAP_HEIGHT = 32;         // マップ高さ
-const MAP_WIDTH = 32;          // マップ幅
-const SMOOTH = 0;              // 補間処理
-const TILECOLUMN = 8;          // タイル桁数
-const TILEROW = 41;            // タイル行数
-const TILESIZE = 32;           // タイルサイズ（ドット）
+const CHRHEIGHT  = 32;               // キャラの高さ
+const CHRWIDTH   = 32;               //　キャラの幅
+const FONT       = "32px monospace"; // 使用フォント
+const HEIGHT     = 640;              // 仮装画面サイズ。高さ
+const WIDTH      = 960;              // 仮装画面サイズ。幅
+const MAP_HEIGHT = 32;               // マップ高さ
+const MAP_WIDTH  = 32;               // マップ幅
+const SMOOTH     = 0;                // 補間処理
+const TILECOLUMN = 8;                // タイル桁数
+const TILEROW    = 41;               // タイル行数
+const TILESIZE   = 32;               // タイルサイズ（ドット）
 
 let gFrame = 0;                // 内部カウンタ
 let gHeight;                   // 実画面の高さ
@@ -82,7 +84,9 @@ function DrawMain(){
     } 
   }
 
-  g.drawImage(gImgPlayer, 0, 0);
+  g.drawImage(gImgPlayer,
+              0, 0, CHRWIDTH, CHRHEIGHT,
+              WIDTH / 2, HEIGHT / 2, CHRWIDTH, CHRHEIGHT);
 
   // g.font = FONT;                              // 文字フォントwp設定
   // g.fillText("Hello World" + gFrame, gFrame / 10, 64);
