@@ -83,14 +83,20 @@ function DrawMain(){
     for(let x = 0; x < 30; x++ ){
       let px = gPlayerX + x;
       let py = gPlayerY + y;
-      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap1[ py * MAP_WIDTH + px ]);
-      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap2[ py * MAP_WIDTH + px ]); 
+      DrawTile( g, x * TILESIZE - TILESIZE / 2, 
+                y * TILESIZE - TILESIZE / 2, gMap1[ py * MAP_WIDTH + px ]);
+      DrawTile( g, x * TILESIZE - TILESIZE / 2, 
+                y * TILESIZE - TILESIZE / 2, gMap2[ py * MAP_WIDTH + px ]); 
     } 
   }
+  
+  g.fillStyle = "#ff0000";                  // 基準線の色
+  g.fillRect(0, HEIGHT / 2 - 1, WIDTH, 2);  // Y座標基準線
+  g.fillRect(WIDTH / 2 - 1, 0, 2, HEIGHT);  // X座標基準線
 
   g.drawImage(gImgPlayer,
               0, 0, CHRWIDTH, CHRHEIGHT,
-              WIDTH / 2, HEIGHT / 2, CHRWIDTH, CHRHEIGHT);
+              WIDTH / 2 - CHRWIDTH / 2, HEIGHT / 2 - CHRHEIGHT / 2, CHRWIDTH, CHRHEIGHT);
 
   // g.font = FONT;                              // 文字フォントwp設定
   // g.fillText("Hello World" + gFrame, gFrame / 10, 64);
