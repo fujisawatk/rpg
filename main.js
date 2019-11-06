@@ -1,16 +1,18 @@
 "use strict"
 
-const CHRHEIGHT  = 32;               // キャラの高さ
-const CHRWIDTH   = 32;               //　キャラの幅
-const FONT       = "32px monospace"; // 使用フォント
-const HEIGHT     = 640;              // 仮装画面サイズ。高さ
-const WIDTH      = 960;              // 仮装画面サイズ。幅
-const MAP_HEIGHT = 32;               // マップ高さ
-const MAP_WIDTH  = 32;               // マップ幅
-const SMOOTH     = 0;                // 補間処理
-const TILECOLUMN = 8;                // タイル桁数
-const TILEROW    = 41;               // タイル行数
-const TILESIZE   = 32;               // タイルサイズ（ドット）
+const CHRHEIGHT  = 32;                      // キャラの高さ
+const CHRWIDTH   = 32;                      //　キャラの幅
+const FONT       = "36px monospace";        // 使用フォント
+const FONTSTYLE  = "#ffffff"                // 文字色
+const HEIGHT     = 640;                     // 仮装画面サイズ。高さ
+const WIDTH      = 960;                     // 仮装画面サイズ。幅
+const MAP_HEIGHT = 32;                      // マップ高さ
+const MAP_WIDTH  = 32;                      // マップ幅
+const SMOOTH     = 0;                       // 補間処理
+const TILECOLUMN = 8;                       // タイル桁数
+const TILEROW    = 41;                      // タイル行数
+const TILESIZE   = 32;                      // タイルサイズ（ドット）
+const WNDSTYLE   = "rgba( 0, 0, 0, 0.75 )"; // ウィンドウの色
 
 let gFrame = 0;                // 内部カウンタ
 let gHeight;                   // 実画面の高さ
@@ -79,10 +81,12 @@ function DrawMain(){
 
   const g = gScreen.getContext("2d");              // 仮想画面の2D描画コンテキストを取得
 
-  for( let y = 0; y < 20; y++ ){
-    for(let x = 0; x < 30; x++ ){
-      let px = gPlayerX + x;
-      let py = gPlayerY + y;
+  for( let dy = -10; dy <= 9 ; dy++ ){
+    let y = dy + 10;
+    for( let dx = -15; dx <= 14; dx++ ){
+      let x = dx + 15;
+      let px = gPlayerX + dx;
+      let py = gPlayerY + dy;
       DrawTile( g, x * TILESIZE - TILESIZE / 2, 
                 y * TILESIZE - TILESIZE / 2, gMap1[ py * MAP_WIDTH + px ]);
       DrawTile( g, x * TILESIZE - TILESIZE / 2, 
@@ -97,9 +101,13 @@ function DrawMain(){
   g.drawImage(gImgPlayer,
               0, 0, CHRWIDTH, CHRHEIGHT,
               WIDTH / 2 - CHRWIDTH / 2, HEIGHT / 2 - CHRHEIGHT / 2, CHRWIDTH, CHRHEIGHT);
-
-  // g.font = FONT;                              // 文字フォントwp設定
-  // g.fillText("Hello World" + gFrame, gFrame / 10, 64);
+  
+  g.fillStyle = WNDSTYLE                               // ウィンドウの色
+  g.fillRect( WIDTH / 8, HEIGHT - (HEIGHT / 6), 
+              WIDTH - WIDTH / 4, HEIGHT / 8 );            
+  g.font = FONT;                                       // 文字フォントwp設定
+  g.fillStyle = FONTSTYLE;                             // 文字色
+  g.fillText("x=" + gPlayerX + " y=" + gPlayerY, WIDTH / 6, HEIGHT - (HEIGHT / 12));
 }
 
 function DrawTile(g, x, y, idx){
