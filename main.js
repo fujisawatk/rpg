@@ -1,20 +1,30 @@
 "use strict"
 
-const FONT = "32px monospace"; // 使用フォント
-const HEIGHT = 640;            // 仮装画面サイズ。高さ
-const WIDTH = 960;             // 仮装画面サイズ。幅
-const MAP_HEIGHT = 32;         // マップ高さ
-const MAP_WIDTH = 32;          // マップ幅
-const SMOOTH = 0;              // 補間処理
-const TILECOLUMN = 8;    // タイル桁数
-const TILEROW = 41;       // タイル行数
-const TILESIZE = 32;           // タイルサイズ（ドット）
+const CHRHEIGHT  = 32;                      // キャラの高さ
+const CHRWIDTH   = 32;                      //　キャラの幅
+const FONT       = "36px monospace";        // 使用フォント
+const FONTSTYLE  = "#ffffff"                // 文字色
+const HEIGHT     = 640;                     // 仮装画面サイズ。高さ
+const WIDTH      = 960;                     // 仮装画面サイズ。幅
+const MAP_HEIGHT = 32;                      // マップ高さ
+const MAP_WIDTH  = 32;                      // マップ幅
+const SMOOTH     = 0;                       // 補間処理
+const TILECOLUMN = 8;                       // タイル桁数
+const TILEROW    = 41;                      // タイル行数
+const TILESIZE   = 32;                      // タイルサイズ（ドット）
+const WNDSTYLE   = "rgba( 0, 0, 0, 0.75 )"; // ウィンドウの色
 
-let gScreen;                   // 仮想画面
 let gFrame = 0;                // 内部カウンタ
 let gHeight;                   // 実画面の高さ
 let gWidth;                    // 実画面の幅
 let gImgMap;                   // 画像。マップ
+let gImgPlayer;                // 画像。プレイヤー
+let gPlayerX = 0;              // プレイヤー座標X
+let gPlayerY = 0;              // プレイヤー座標Y
+let gScreen;                   // 仮想画面
+
+const gFileMap    = "img/map.png";
+const gFilePlayer = "img/player.png";
 
 // マップ
 const gMap1 = [
@@ -71,15 +81,33 @@ function DrawMain(){
 
   const g = gScreen.getContext("2d");              // 仮想画面の2D描画コンテキストを取得
 
-  for( let y = 0; y < 20; y++ ){
-    for(let x = 0; x < 30; x++ ){
-      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap1[ y * MAP_WIDTH + x ]);
-      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap2[ y * MAP_WIDTH + x ]); 
+  for( let dy = -10; dy <= 9 ; dy++ ){
+    let y = dy + 10;
+    for( let dx = -15; dx <= 14; dx++ ){
+      let x = dx + 15;
+      let px = gPlayerX + dx;
+      let py = gPlayerY + dy;
+      DrawTile( g, x * TILESIZE - TILESIZE / 2, 
+                y * TILESIZE - TILESIZE / 2, gMap1[ py * MAP_WIDTH + px ]);
+      DrawTile( g, x * TILESIZE - TILESIZE / 2, 
+                y * TILESIZE - TILESIZE / 2, gMap2[ py * MAP_WIDTH + px ]); 
     } 
   }
+  
+  g.fillStyle = "#ff0000";                  // 基準線の色
+  g.fillRect(0, HEIGHT / 2 - 1, WIDTH, 2);  // Y座標基準線
+  g.fillRect(WIDTH / 2 - 1, 0, 2, HEIGHT);  // X座標基準線
 
-  g.font = FONT;                              // 文字フォントwp設定
-  g.fillText("Hello World" + gFrame, gFrame / 10, 64);
+  g.drawImage(gImgPlayer,
+              0, 0, CHRWIDTH, CHRHEIGHT,
+              WIDTH / 2 - CHRWIDTH / 2, HEIGHT / 2 - CHRHEIGHT / 2, CHRWIDTH, CHRHEIGHT);
+  
+  g.fillStyle = WNDSTYLE                               // ウィンドウの色
+  g.fillRect( WIDTH / 8, HEIGHT - (HEIGHT / 6), 
+              WIDTH - WIDTH / 4, HEIGHT / 8 );            
+  g.font = FONT;                                       // 文字フォントwp設定
+  g.fillStyle = FONTSTYLE;                             // 文字色
+  g.fillText("x=" + gPlayerX + " y=" + gPlayerY, WIDTH / 6, HEIGHT - (HEIGHT / 12));
 }
 
 function DrawTile(g, x, y, idx){
@@ -87,6 +115,12 @@ function DrawTile(g, x, y, idx){
   const ix = (idx % TILECOLUMN) * TILESIZE;
   const iy = Math.floor(idx / TILECOLUMN) * TILESIZE;
   g.drawImage( gImgMap, ix, iy, TILESIZE, TILESIZE, x, y, TILESIZE, TILESIZE );
+}
+
+function LoadImage(){
+
+  gImgMap    = new Image();　gImgMap.src    = gFileMap;     // マップ画像読み込み
+  gImgPlayer = new Image();　gImgPlayer.src = gFilePlayer;  // プレイヤー画像読み込み
 }
 
 function WmPaint(){
@@ -129,10 +163,20 @@ function WmTimer(){
   WmPaint();
 }
 
+// キー入力（DOWN）イベント
+window.onkeydown = function( ev ){
+  let c = ev.keyCode;       // キーコード取得
+
+  if( c == 37 ) gPlayerX--; // 左
+  if( c == 38 ) gPlayerY--; // 上
+  if( c == 39 ) gPlayerX++; // 右
+  if( c == 40 ) gPlayerY++; // 下
+}
+
 // ブラウザ起動イベント
 window.onload = function(){
 
-  gImgMap = new Image();　gImgMap.src = "img/map.png";  // マップ画像読み込み
+  LoadImage();
   
   gScreen = document.createElement( "canvas" );         // 仮想画面を作成
   gScreen.width = WIDTH;                                // 仮想画面の幅を設定
