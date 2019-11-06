@@ -17,6 +17,8 @@ let gHeight;                   // 実画面の高さ
 let gWidth;                    // 実画面の幅
 let gImgMap;                   // 画像。マップ
 let gImgPlayer;                // 画像。プレイヤー
+let gPlayerX = 0;              // プレイヤー座標X
+let gPlayerY = 0;              // プレイヤー座標Y
 let gScreen;                   // 仮想画面
 
 const gFileMap    = "img/map.png";
@@ -79,8 +81,10 @@ function DrawMain(){
 
   for( let y = 0; y < 20; y++ ){
     for(let x = 0; x < 30; x++ ){
-      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap1[ y * MAP_WIDTH + x ]);
-      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap2[ y * MAP_WIDTH + x ]); 
+      let px = gPlayerX + x;
+      let py = gPlayerY + y;
+      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap1[ py * MAP_WIDTH + px ]);
+      DrawTile( g, x * TILESIZE, y * TILESIZE, gMap2[ py * MAP_WIDTH + px ]); 
     } 
   }
 
@@ -143,6 +147,16 @@ function WmTimer(){
 
   gFrame++;  // 内部カウンタを加算
   WmPaint();
+}
+
+// キー入力（DOWN）イベント
+window.onkeydown = function( ev ){
+  let c = ev.keyCode;       // キーコード取得
+
+  if( c == 37 ) gPlayerX--; // 左
+  if( c == 38 ) gPlayerY--; // 上
+  if( c == 39 ) gPlayerX++; // 右
+  if( c == 40 ) gPlayerY++; // 下
 }
 
 // ブラウザ起動イベント
