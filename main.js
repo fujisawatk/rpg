@@ -81,12 +81,13 @@ function DrawMain(){
 
   const g = gScreen.getContext("2d");              // 仮想画面の2D描画コンテキストを取得
 
-  for( let dy = -10; dy <= 9 ; dy++ ){
+  for( let dy = -10; dy <= 10 ; dy++ ){
     let y = dy + 10;
-    for( let dx = -15; dx <= 14; dx++ ){
+    let py = ( gPlayerY + dy + MAP_HEIGHT ) % MAP_HEIGHT;
+    for( let dx = -15; dx <= 15; dx++ ){
       let x = dx + 15;
-      let px = gPlayerX + dx;
-      let py = gPlayerY + dy;
+      let px = ( gPlayerX + dx + MAP_WIDTH ) % MAP_WIDTH;
+      
       DrawTile( g, x * TILESIZE - TILESIZE / 2, 
                 y * TILESIZE - TILESIZE / 2, gMap1[ py * MAP_WIDTH + px ]);
       DrawTile( g, x * TILESIZE - TILESIZE / 2, 
