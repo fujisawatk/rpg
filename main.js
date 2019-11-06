@@ -6,15 +6,19 @@ const WIDTH = 960;             // 仮装画面サイズ。幅
 const MAP_HEIGHT = 32;         // マップ高さ
 const MAP_WIDTH = 32;          // マップ幅
 const SMOOTH = 0;              // 補間処理
-const TILECOLUMN = 8;    // タイル桁数
-const TILEROW = 41;       // タイル行数
+const TILECOLUMN = 8;          // タイル桁数
+const TILEROW = 41;            // タイル行数
 const TILESIZE = 32;           // タイルサイズ（ドット）
 
-let gScreen;                   // 仮想画面
 let gFrame = 0;                // 内部カウンタ
 let gHeight;                   // 実画面の高さ
 let gWidth;                    // 実画面の幅
 let gImgMap;                   // 画像。マップ
+let gImgPlayer;                // 画像。プレイヤー
+let gScreen;                   // 仮想画面
+
+const gFileMap    = "img/map.png";
+const gFilePlayer = "img/player.png";
 
 // マップ
 const gMap1 = [
@@ -78,8 +82,10 @@ function DrawMain(){
     } 
   }
 
-  g.font = FONT;                              // 文字フォントwp設定
-  g.fillText("Hello World" + gFrame, gFrame / 10, 64);
+  g.drawImage(gImgPlayer, 0, 0);
+
+  // g.font = FONT;                              // 文字フォントwp設定
+  // g.fillText("Hello World" + gFrame, gFrame / 10, 64);
 }
 
 function DrawTile(g, x, y, idx){
@@ -87,6 +93,12 @@ function DrawTile(g, x, y, idx){
   const ix = (idx % TILECOLUMN) * TILESIZE;
   const iy = Math.floor(idx / TILECOLUMN) * TILESIZE;
   g.drawImage( gImgMap, ix, iy, TILESIZE, TILESIZE, x, y, TILESIZE, TILESIZE );
+}
+
+function LoadImage(){
+
+  gImgMap    = new Image();　gImgMap.src    = gFileMap;     // マップ画像読み込み
+  gImgPlayer = new Image();　gImgPlayer.src = gFilePlayer;  // プレイヤー画像読み込み
 }
 
 function WmPaint(){
@@ -132,7 +144,7 @@ function WmTimer(){
 // ブラウザ起動イベント
 window.onload = function(){
 
-  gImgMap = new Image();　gImgMap.src = "img/map.png";  // マップ画像読み込み
+  LoadImage();
   
   gScreen = document.createElement( "canvas" );         // 仮想画面を作成
   gScreen.width = WIDTH;                                // 仮想画面の幅を設定
