@@ -172,6 +172,13 @@ window.onkeydown = function( ev ){
   if( c == 38 ) gPlayerY--; // 上
   if( c == 39 ) gPlayerX++; // 右
   if( c == 40 ) gPlayerY++; // 下
+
+  // マップループ処理
+  gPlayerX += MAP_WIDTH;    // 座標がマイナスされたらマップ幅分プラスする
+  gPlayerX %= MAP_WIDTH;    // 座標がプラスされたらマップ幅に対しての余りを代入する
+  gPlayerY += MAP_HEIGHT;   // 座標がマイナスされたらマップ高さ分プラスする
+  gPlayerY %= MAP_HEIGHT;   // 座標がプラスされたらマップ高さに対しての余りを代入する
+
 }
 
 // ブラウザ起動イベント
