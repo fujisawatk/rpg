@@ -81,12 +81,15 @@ function DrawMain(){
 
   const g = gScreen.getContext("2d");              // 仮想画面の2D描画コンテキストを取得
 
+  let mx = Math.floor( gPlayerX / TILESIZE );
+  let my = Math.floor( gPlayerY / TILESIZE );
+
   for( let dy = -10; dy <= 10 ; dy++ ){
     let y = dy + 10;
-    let py = ( gPlayerY + dy + MAP_HEIGHT ) % MAP_HEIGHT;
+    let py = ( my + dy + MAP_HEIGHT ) % MAP_HEIGHT;
     for( let dx = -15; dx <= 15; dx++ ){
       let x = dx + 15;
-      let px = ( gPlayerX + dx + MAP_WIDTH ) % MAP_WIDTH;
+      let px = ( mx + dx + MAP_WIDTH ) % MAP_WIDTH;
       
       DrawTile( g, x * TILESIZE - TILESIZE / 2, 
                 y * TILESIZE - TILESIZE / 2, gMap1[ py * MAP_WIDTH + px ]);
@@ -103,12 +106,14 @@ function DrawMain(){
               0, 0, CHRWIDTH, CHRHEIGHT,
               WIDTH / 2 - CHRWIDTH / 2, HEIGHT / 2 - CHRHEIGHT / 2, CHRWIDTH, CHRHEIGHT);
   
-  g.fillStyle = WNDSTYLE                               // ウィンドウの色
-  g.fillRect( WIDTH / 8, HEIGHT - (HEIGHT / 6), 
-              WIDTH - WIDTH / 4, HEIGHT / 8 );            
-  g.font = FONT;                                       // 文字フォントwp設定
-  g.fillStyle = FONTSTYLE;                             // 文字色
-  g.fillText("x=" + gPlayerX + " y=" + gPlayerY, WIDTH / 6, HEIGHT - (HEIGHT / 12));
+  g.fillStyle = WNDSTYLE                           // ウィンドウの色
+  g.fillRect( WIDTH / 8, HEIGHT - (HEIGHT / 6),    // ウィンドウの座標
+              WIDTH - WIDTH / 4, HEIGHT / 8 );     // ウィンドウの大きさ
+  g.font = FONT;                                   // 文字フォントwp設定
+  g.fillStyle = FONTSTYLE;                         // 文字色
+  g.fillText("x=" + gPlayerX + " y=" + gPlayerY +  // X座標、Y座標
+             " m=" + gMap2[ my * MAP_WIDTH + mx],  // プレイヤー座標のブロック番号
+             WIDTH / 6, HEIGHT - (HEIGHT / 12));   // デバッグテキスト座標
 }
 
 function DrawTile(g, x, y, idx){
@@ -174,10 +179,10 @@ window.onkeydown = function( ev ){
   if( c == 40 ) gPlayerY++; // 下
 
   // マップループ処理
-  gPlayerX += MAP_WIDTH;    // 座標がマイナスされたらマップ幅分プラスする
-  gPlayerX %= MAP_WIDTH;    // 座標がプラスされたらマップ幅に対しての余りを代入する
-  gPlayerY += MAP_HEIGHT;   // 座標がマイナスされたらマップ高さ分プラスする
-  gPlayerY %= MAP_HEIGHT;   // 座標がプラスされたらマップ高さに対しての余りを代入する
+  gPlayerX += ( MAP_WIDTH  * TILESIZE );   // 座標がマイナスされたらマップ幅分プラスする
+  gPlayerX %= ( MAP_WIDTH  * TILESIZE );   // 座標がプラスされたらマップ幅に対しての余りを代入する
+  gPlayerY += ( MAP_HEIGHT * TILESIZE );   // 座標がマイナスされたらマップ高さ分プラスする
+  gPlayerY %= ( MAP_HEIGHT * TILESIZE );   // 座標がプラスされたらマップ高さに対しての余りを代入する
 
 }
 
