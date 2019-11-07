@@ -1,7 +1,7 @@
 "use strict"
 
 const CHRHEIGHT  = 32;                      // キャラの高さ
-const CHRWIDTH   = 32;                      //　キャラの幅
+const CHRWIDTH   = 32;                      // キャラの幅
 const FONT       = "36px monospace";        // 使用フォント
 const FONTSTYLE  = "#ffffff"                // 文字色
 const HEIGHT     = 640;                     // 仮装画面サイズ。高さ
@@ -81,17 +81,19 @@ const gMap2 = [
 
 function DrawMain(){
 
-  const g = gScreen.getContext("2d");              // 仮想画面の2D描画コンテキストを取得
+  const g = gScreen.getContext("2d");          // 仮想画面の2D描画コンテキストを取得
 
-  let mx = Math.floor( gPlayerX / TILESIZE );
-  let my = Math.floor( gPlayerY / TILESIZE );
+  let mx = Math.floor( gPlayerX / TILESIZE );  // X軸方向に1タイル分移動した際のプレイヤー位置
+  let my = Math.floor( gPlayerY / TILESIZE );  // Y軸方向に1タイル分移動した際のプレイヤー位置
 
-  for( let dy = -10; dy <= 10 ; dy++ ){
-    let y = dy + 10;
-    let py = ( my + dy + MAP_HEIGHT ) % MAP_HEIGHT;
-    for( let dx = -15; dx <= 15; dx++ ){
-      let x = dx + 15;
-      let px = ( mx + dx + MAP_WIDTH ) % MAP_WIDTH;
+  for( let dy = -10; dy <= 10 ; dy++ ){        // Y軸方向にタイルを敷き詰めるための繰り返し処理(画面中央が基準)
+    let y  = dy + 10;                          // 画面中央を基準としてタイルを敷き詰めた際、左上を原点とするためのY座標調整
+    let ty = my + dy;                          // タイル座標Y
+    let py = ( ty + MAP_HEIGHT ) % MAP_HEIGHT; // ループ後タイル座標Y
+    for( let dx = -15; dx <= 15; dx++ ){       // X軸方向にタイルを敷き詰めるための繰り返し処理(画面中央が基準)
+      let x  = dx + 15;                        // 画面中央を基準としてタイルを敷き詰めた際、左上を原点とするためのX座標調整
+      let tx = mx + dx;                        // タイル座標X
+      let px = ( tx + MAP_WIDTH ) % MAP_WIDTH; // ループ後タイル座標X
       
       DrawTile( g, x * TILESIZE - TILESIZE / 2, 
                 y * TILESIZE - TILESIZE / 2, gMap1[ py * MAP_WIDTH + px ]);
